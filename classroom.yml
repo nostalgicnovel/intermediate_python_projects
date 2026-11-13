@@ -27,41 +27,52 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: TestCollectionRecord
-        id: testcollectionrecord
+      - name: TestFirstClassFunctions
+        id: testfirstclassfunctions
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: TestCollectionRecord
+          test-name: TestFirstClassFunctions
           setup-command: ""
-          command: pytest test_museum_catalog.py::TestCollectionRecord -v
+          command: pytest test_expense_reports.py::TestFirstClassFunctions -v
           timeout: 10
           max-score: 10
 
-      - name: TestConcreteRecords
-        id: testconcreterecords
+      - name: TestMapAndFilter
+        id: testmapandfilter
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: TestConcreteRecords
+          test-name: TestMapAndFilter
           setup-command: ""
-          command: pytest test_museum_catalog.py::TestConcreteRecords -v
+          command: pytest test_expense_reports.py::TestMapAndFilter -v
           timeout: 10
           max-score: 10
 
-      - name: TestPolymorphismAndProtocol
-        id: testpolymorphismandprotocol
+      - name: TestReduce
+        id: testreduce
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: TestPolymorphismAndProtocol
+          test-name: TestReduce
           setup-command: ""
-          command: pytest test_museum_catalog.py::TestPolymorphismAndProtocol -v
+          command: pytest test_expense_reports.py::TestReduce -v
+          timeout: 10
+          max-score: 10
+
+      - name: TestAnyAllAndPipelines
+        id: testanyallandpipelines
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: TestAnyAllAndPipelines
+          setup-command: ""
+          command: pytest test_expense_reports.py::TestAnyAllAndPipelines -v
           timeout: 10
           max-score: 10
 
       - name: Autograding Reporter
         uses: classroom-resources/autograding-grading-reporter@v1
         env:
-          TESTCOLLECTIONRECORD_RESULTS: "${{steps.testcollectionrecord.outputs.result}}"
-          TESTCONCRETERECORDS_RESULTS: "${{steps.testconcreterecords.outputs.result}}"
-          TESTPOLYMORPHISMANDPROTOCOL_RESULTS: "${{steps.testpolymorphismandprotocol.outputs.result}}"
+          TESTFIRSTCLASSFUNCTIONS_RESULTS: "${{steps.testfirstclassfunctions.outputs.result}}"
+          TESTMAPANDFILTER_RESULTS: "${{steps.testmapandfilter.outputs.result}}"
+          TESTREDUCE_RESULTS: "${{steps.testreduce.outputs.result}}"
+          TESTANYALLANDPIPELINES_RESULTS: "${{steps.testanyallandpipelines.outputs.result}}"
         with:
-          runners: testcollectionrecord,testconcreterecords,testpolymorphismandprotocol
+          runners: testfirstclassfunctions,testmapandfilter,testreduce,testanyallandpipelines
