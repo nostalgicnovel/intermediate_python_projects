@@ -24,55 +24,47 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install tkinter and a virtual display
+        run: sudo apt-get update && sudo apt-get install -y python3-tk xvfb
+
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: TestFirstClassFunctions
-        id: testfirstclassfunctions
+      - name: TestPureFunctions
+        id: testpurefunctions
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: TestFirstClassFunctions
+          test-name: TestPureFunctions
           setup-command: ""
-          command: pytest test_expense_reports.py::TestFirstClassFunctions -v
-          timeout: 10
+          command: xvfb-run -a pytest test_ticket_desk.py::TestPureFunctions -v
+          timeout: 20
           max-score: 10
 
-      - name: TestMapAndFilter
-        id: testmapandfilter
+      - name: TestWindowLayout
+        id: testwindowlayout
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: TestMapAndFilter
+          test-name: TestWindowLayout
           setup-command: ""
-          command: pytest test_expense_reports.py::TestMapAndFilter -v
-          timeout: 10
+          command: xvfb-run -a pytest test_ticket_desk.py::TestWindowLayout -v
+          timeout: 20
           max-score: 10
 
-      - name: TestReduce
-        id: testreduce
+      - name: TestEventHandlers
+        id: testeventhandlers
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: TestReduce
+          test-name: TestEventHandlers
           setup-command: ""
-          command: pytest test_expense_reports.py::TestReduce -v
-          timeout: 10
-          max-score: 10
-
-      - name: TestAnyAllAndPipelines
-        id: testanyallandpipelines
-        uses: classroom-resources/autograding-command-grader@v1
-        with:
-          test-name: TestAnyAllAndPipelines
-          setup-command: ""
-          command: pytest test_expense_reports.py::TestAnyAllAndPipelines -v
-          timeout: 10
-          max-score: 10
+          command: xvfb-run -a pytest test_ticket_desk.py::TestEventHandlers -v
+          timeout: 20
+          max-score: 15
 
       - name: Autograding Reporter
         uses: classroom-resources/autograding-grading-reporter@v1
         env:
-          TESTFIRSTCLASSFUNCTIONS_RESULTS: "${{steps.testfirstclassfunctions.outputs.result}}"
-          TESTMAPANDFILTER_RESULTS: "${{steps.testmapandfilter.outputs.result}}"
-          TESTREDUCE_RESULTS: "${{steps.testreduce.outputs.result}}"
-          TESTANYALLANDPIPELINES_RESULTS: "${{steps.testanyallandpipelines.outputs.result}}"
+          TESTPUREFUNCTIONS_RESULTS: "${{steps.testpurefunctions.outputs.result}}"
+          TESTWINDOWLAYOUT_RESULTS: "${{steps.testwindowlayout.outputs.result}}"
+          TESTEVENTHANDLERS_RESULTS: "${{steps.testeventhandlers.outputs.result}}"
         with:
-          runners: testfirstclassfunctions,testmapandfilter,testreduce,testanyallandpipelines
+          runners: testpurefunctions,testwindowlayout,testeventhandlers

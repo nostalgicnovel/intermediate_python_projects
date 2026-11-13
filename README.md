@@ -1,52 +1,56 @@
-# Programming Assignment 6 - Functional Programming
+# Programming Assignment 7 - GUIs
 
 ## Assignment Overview
 
-In this assignment, you will use functional programming techniques to process
-employee expense reports. Each expense records an ID, an employee, a category,
-an amount, and whether it has been approved. Finance staff regularly need to
-total expenses, find large or unapproved items, apply tax rates, and produce
-short summaries for review.
+In this assignment, you will build a small desktop application with `tkinter`
+for logging internal IT support tickets. Staff enter a requester name and a
+short summary, choose a priority, optionally flag the ticket for follow-up, and
+add it to a list. They can also remove a selected ticket or clear the form.
 
-Complete the functions in `expense_reports.py`. You will write functions that
-return other functions, pass functions as arguments, and use lambda
-expressions with `map`, `filter`, `sorted`, `reduce`, `any`, and `all`. This is
-an applied lab, not a program-design project: use the supplied signatures and
-complete the functions marked with `TODO`. Do not change required function
-names or parameter lists because the tests depend on them.
+Complete the functions and methods in `ticket_desk.py`. You will write a few
+plain functions that validate and format ticket data, then build the window
+layout and the event handlers that connect the widgets to that logic. You may
+design the layout with the [Visual Tkinter Designer](https://visualtkinter.com/designer)
+and paste the generated widget code into `build_widgets`, adjusting names to
+match the required attributes, or write it by hand with `.place()`. Do not
+change required names or parameter lists because the tests depend on them.
+
+Your completed form should look as follows:
+
+<img src=".github/images/formdesign.png" alt="Graph" style="width:50%">
+
 
 ## Learning Objectives
 
 By the end of this assignment, you should be able to:
 
-- Treat functions as first-class values by storing, passing, and returning them.
-- Write a higher-order function that returns a new function.
-- Write a higher-order function that accepts a function as an argument.
-- Use lambda expressions for short, single-purpose operations.
-- Transform sequences with `map()` and select items with `filter()`.
-- Convert lazy `map` and `filter` results into lists.
-- Sort with `sorted()` and a lambda `key`.
-- Combine a sequence into one value with `functools.reduce()`.
-- Use `any()` and `all()` to test conditions across a collection.
-- Chain `filter()` and `map()` into a small processing pipeline.
-- Write and run `pytest` tests for small functions.
+- Build a `tkinter` window with labels, entries, buttons, radiobuttons, a
+  checkbutton, a listbox, and a scrollbar.
+- Use `StringVar` and `BooleanVar` to share state with widgets.
+- Connect buttons to event handler methods with the `command` option.
+- Read, clear, and update widget contents.
+- Validate user input and report problems with `messagebox`.
+- Keep GUI state (a list of dictionaries) in sync with what is displayed.
+- Separate testable logic from widget code.
+- Use `pip` and a virtual environment (`venv`) to install project dependencies.
+- Run `pytest` tests against a GUI application.
 
 ## Assignment Structure
 
-The assignment includes a starter module with an `Expense` dataclass and
+The assignment includes a starter module containing the `TicketDesk` class and
 function stubs, a pytest file that checks the required behavior, and a GitHub
-Actions workflow that runs the tests for autograding. All assignment code and
-test data use Python; no external data files or services are needed.
+Actions workflow that runs the tests for autograding. All work is done in
+Python; no external data files, images, or services are needed.
 
 ### Directory Structure
 
 ```
-218-pa-6/
+218-pa-7/
 ├── README.md
 ├── .gitignore
 ├── requirements.txt
-├── expense_reports.py
-├── test_expense_reports.py
+├── ticket_desk.py
+├── test_ticket_desk.py
 └── .github
     └── workflows
         └── classroom.yml
@@ -54,79 +58,91 @@ test data use Python; no external data files or services are needed.
 
 ## Functions to Implement
 
-Complete the functions in `expense_reports.py`. Keep each required name and
-parameter list unchanged. The `Expense` dataclass is provided. The docstrings
-in the starter module are the authoritative reference for exact formatting and
-return values. Do not use explicit `for` or `while` loops in these functions.
+Complete the items below in `ticket_desk.py`. Keep each required name and
+parameter list unchanged. The constants, `TicketDesk.__init__`, and the imports
+are provided. The docstrings in the starter module are the authoritative
+reference for exact text, return values, and attribute names.
 
-| Function | Description |
+| Function or Method | Description |
 | --- | --- |
-| `make_amount_checker(limit)` | Return a lambda that tests whether an expense's amount is strictly greater than `limit`. |
-| `apply_to_expenses(expenses, transform)` | Use `map()` to apply the given function to every expense and return a list of results. |
-| `amounts_with_tax(expenses, tax_rate)` | Use `map()` and a lambda to return each amount plus tax, rounded to 2 decimals. |
-| `filter_by_category(expenses, category)` | Use `filter()` and a lambda to keep expenses with an exactly matching category. |
-| `filter_expenses(expenses, predicate)` | Use `filter()` with a caller-supplied predicate, such as one from `make_amount_checker`. |
-| `sort_by_amount(expenses, descending=False)` | Return a new list sorted by amount using `sorted()` and a lambda key. |
-| `total_amount(expenses)` | Use `reduce()` to sum amounts, rounded to 2 decimals; return `0.0` for an empty list. |
-| `largest_expense(expenses)` | Use `reduce()` to find the largest expense (earlier wins ties); return `None` for an empty list. |
-| `total_approved_by_employee(expenses, employee)` | Combine `filter()` and `reduce()` to total one employee's approved expenses. |
-| `has_unapproved_over(expenses, limit)` | Use `any()` to test whether any unapproved expense is over `limit`. |
-| `all_have_category(expenses, allowed)` | Use `all()` to test whether every category is in the allowed set. |
-| `approved_summaries(expenses)` | Use `filter()` and `map()` to build summary strings for approved expenses. |
+| `validate_ticket(requester, summary, priority)` | Return the first validation error message, or `None` if the input is valid. |
+| `format_ticket(number, requester, summary, priority, follow_up)` | Build the text shown for a ticket in the list. |
+| `response_target_hours(priority, follow_up)` | Look up the response target for a priority, halved for follow-up tickets; raise `ValueError` for an unknown priority. |
+| `status_text(tickets)` | Build the status line with the number of open tickets and the number of high priority tickets. |
+| `TicketDesk.build_widgets()` | Create and place the labels, entries, radiobuttons, checkbutton, buttons, listbox, scrollbar, and status label using the required attribute names. |
+| `TicketDesk.on_add()` | Validate the form; show an error dialog if invalid, otherwise store the ticket, add it to the listbox, reset the form, and update the status. |
+| `TicketDesk.on_remove()` | Remove the selected ticket from the listbox and the ticket list, or show an information dialog if nothing is selected. |
+| `TicketDesk.on_clear()` | Reset the entries, priority, and checkbutton, and focus the requester entry, without changing the ticket list. |
+| `TicketDesk.on_exit()` | Close the window. |
+| `main()` | Create the root window and the application, then start the event loop. |
 
 ## Testing and Performance Analysis
 
-Your implementation is checked with `test_expense_reports.py`, a suite of
-`pytest` unit tests covering every required function. The tests check that:
+Your implementation is checked with `test_ticket_desk.py`, a suite of `pytest`
+unit tests. The tests are grouped as follows:
 
-- Returned functions are callable, apply the correct comparison, and keep their
-  own limit values.
-- Functions passed as arguments are applied correctly, including named
-  functions and lambdas.
-- Results are returned as lists in the original order, with the required
-  rounding.
-- Filtering handles exact matches, no matches, and the original objects.
-- Sorting works in both directions and does not modify the input list.
-- Reduction handles totals, rounding, ties, and empty lists.
-- `any()` and `all()` behavior is correct for boundary values and empty lists.
-- Summary strings use the required format.
+- `TestPureFunctions` checks validation order and messages, length boundaries,
+  ticket formatting, response targets, and the status line.
+- `TestWindowLayout` checks the window title and size, widget types and text,
+  radiobutton and checkbutton variable bindings, button labels, the listbox and
+  scrollbar connection, the initial status text, and that every widget is
+  placed in the window.
+- `TestEventHandlers` checks adding, removing, and clearing tickets, error
+  and information dialogs, numbering, status updates, window closing, and
+  the `main()` entry point.
 
-The tests are also run by `.github/workflows/classroom.yml` for GitHub Actions
-autograding. They use in-memory data, so running pytest does not create or
-modify files. Each function makes a single pass over its input (sorting takes
-O(n log n) time), and `map()` and `filter()` are lazy, so they produce items
-only as they are consumed.
+The GUI tests create a real `tkinter` window that is hidden from view, and
+they replace `messagebox` calls so no dialog ever blocks the tests. They use
+in-memory data only and do not create or modify files. Every function runs in
+time proportional to the number of tickets, which is more than fast enough for
+interactive use. The workflow in `.github/workflows/classroom.yml` runs the
+tests under `xvfb-run` (a virtual display) so they work on GitHub Actions.
 
 ## How to Run
 
 1. Make sure Python 3.12 or later and `pip` are installed.
-2. From this directory, install the testing dependency:
+2. From this directory, create and activate a virtual environment:
+
+   ```
+   python -m venv .venv
+   source .venv/bin/activate
+   ```
+
+   On Windows, activate it with `.venv\Scripts\activate` instead.
+
+3. Install the testing dependency:
 
    ```
    pip install -r requirements.txt
    ```
 
-3. Open `expense_reports.py` and complete each function marked with
+4. Open `ticket_desk.py` and complete each item marked with
    `# TODO: Implement this function`.
-4. Optionally run the sample program to inspect the output:
+5. Run the application to try your window:
 
    ```
-   python expense_reports.py
+   python ticket_desk.py
    ```
 
-5. Run the automated test suite:
+6. Run the automated test suite:
 
    ```
-   pytest test_expense_reports.py -v
+   pytest test_ticket_desk.py -v
    ```
+
+   On a Linux machine without a display, run `xvfb-run pytest test_ticket_desk.py -v`
+   instead. If `tkinter` is missing on Linux, install it with
+   `sudo apt install python3-tk`.
 
 ## Expected Output
 
-When you run `pytest test_expense_reports.py -v`, pytest displays one line for
+When you run `pytest test_ticket_desk.py -v`, pytest displays one line for
 each test, including its test name and a `PASSED` or `FAILED` result. The tests
-are grouped by topic (`TestFirstClassFunctions`, `TestMapAndFilter`,
-`TestReduce`, and `TestAnyAllAndPipelines`), so a failure name (for example,
-`TestReduce::test_largest_expense_tie_keeps_earlier`) identifies the behavior
-that needs attention. When all required behavior is implemented correctly, all
-tests report `PASSED`, followed by a summary with the total number of passed
-tests and the test run time.
+are grouped into `TestPureFunctions`, `TestWindowLayout`, and
+`TestEventHandlers`, so a failure name (for example,
+`TestEventHandlers::test_remove_without_selection`) identifies the behavior
+that needs attention. Until you finish the assignment, most tests report
+`FAILED`. When all required behavior is implemented correctly, every test
+reports `PASSED`, followed by a summary with the total number of passed tests
+and the test run time. Running `python ticket_desk.py` opens the "Support
+Ticket Desk" window; no output is printed to the console.
