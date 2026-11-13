@@ -27,107 +27,74 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: TestTallyScannedItems
-        id: testtallyscanneditems
+      - name: TestAppendCheckoutRecord
+        id: testappendcheckoutrecord
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: TestTallyScannedItems
+          test-name: TestAppendCheckoutRecord
           setup-command: ""
-          command: pytest test_inventory_management.py::TestTallyScannedItems -v
+          command: pytest test_library_records.py::TestAppendCheckoutRecord -v
           timeout: 10
           max-score: 10
 
-      - name: TestMergeDepartmentBudgets
-        id: testmergedepartmentbudgets
+      - name: TestLoadCheckoutCounts
+        id: testloadcheckoutcounts
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: TestMergeDepartmentBudgets
+          test-name: TestLoadCheckoutCounts
           setup-command: ""
-          command: pytest test_inventory_management.py::TestMergeDepartmentBudgets -v
+          command: pytest test_library_records.py::TestLoadCheckoutCounts -v
           timeout: 10
           max-score: 10
 
-      - name: TestFilterLowStock
-        id: testfilterlowstock
+      - name: TestCloseOutSession
+        id: testcloseoutsession
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: TestFilterLowStock
+          test-name: TestCloseOutSession
           setup-command: ""
-          command: pytest test_inventory_management.py::TestFilterLowStock -v
+          command: pytest test_library_records.py::TestCloseOutSession -v
           timeout: 10
           max-score: 10
 
-      - name: TestConvertMetersToFeet
-        id: testconvertmeterstofeet
+      - name: TestExportCatalogToCsv
+        id: testexportcatalogtocsv
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: TestConvertMetersToFeet
+          test-name: TestExportCatalogToCsv
           setup-command: ""
-          command: pytest test_inventory_management.py::TestConvertMetersToFeet -v
+          command: pytest test_library_records.py::TestExportCatalogToCsv -v
           timeout: 10
           max-score: 10
 
-      - name: TestLabelBatchSizes
-        id: testlabelbatchsizes
+      - name: TestImportAvailableTitles
+        id: testimportavailabletitles
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: TestLabelBatchSizes
+          test-name: TestImportAvailableTitles
           setup-command: ""
-          command: pytest test_inventory_management.py::TestLabelBatchSizes -v
+          command: pytest test_library_records.py::TestImportAvailableTitles -v
           timeout: 10
           max-score: 10
 
-      - name: TestExtractUniqueEmailDomains
-        id: testextractuniqueemaildomains
+      - name: TestUpdateLibrarySettings
+        id: testupdatelibrarysettings
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: TestExtractUniqueEmailDomains
+          test-name: TestUpdateLibrarySettings
           setup-command: ""
-          command: pytest test_inventory_management.py::TestExtractUniqueEmailDomains -v
-          timeout: 10
-          max-score: 10
-
-      - name: TestBucketAgesByGroup
-        id: testbucketagesbygroup
-        uses: classroom-resources/autograding-command-grader@v1
-        with:
-          test-name: TestBucketAgesByGroup
-          setup-command: ""
-          command: pytest test_inventory_management.py::TestBucketAgesByGroup -v
-          timeout: 10
-          max-score: 10
-
-      - name: TestEmployeeRecord
-        id: testemployeerecord
-        uses: classroom-resources/autograding-command-grader@v1
-        with:
-          test-name: TestEmployeeRecord
-          setup-command: ""
-          command: pytest test_inventory_management.py::TestEmployeeRecord -v
-          timeout: 10
-          max-score: 10
-
-      - name: TestCalculateGrossPay
-        id: testcalculategrosspay
-        uses: classroom-resources/autograding-command-grader@v1
-        with:
-          test-name: TestCalculateGrossPay
-          setup-command: ""
-          command: pytest test_inventory_management.py::TestCalculateGrossPay -v
+          command: pytest test_library_records.py::TestUpdateLibrarySettings -v
           timeout: 10
           max-score: 10
 
       - name: Autograding Reporter
         uses: classroom-resources/autograding-grading-reporter@v1
         env:
-          TESTTALLYSCANNEDITEMS_RESULTS: "${{steps.testtallyscanneditems.outputs.result}}"
-          TESTMERGEDEPARTMENTBUDGETS_RESULTS: "${{steps.testmergedepartmentbudgets.outputs.result}}"
-          TESTFILTERLOWSTOCK_RESULTS: "${{steps.testfilterlowstock.outputs.result}}"
-          TESTCONVERTMETERSTOFEET_RESULTS: "${{steps.testconvertmeterstofeet.outputs.result}}"
-          TESTLABELBATCHSIZES_RESULTS: "${{steps.testlabelbatchsizes.outputs.result}}"
-          TESTEXTRACTUNIQUEEMAILDOMAINS_RESULTS: "${{steps.testextractuniqueemaildomains.outputs.result}}"
-          TESTBUCKETAGESBYGROUP_RESULTS: "${{steps.testbucketagesbygroup.outputs.result}}"
-          TESTEMPLOYEERECORD_RESULTS: "${{steps.testemployeerecord.outputs.result}}"
-          TESTCALCULATEGROSSPAY_RESULTS: "${{steps.testcalculategrosspay.outputs.result}}"
+          TESTAPPENDCHECKOUTRECORD_RESULTS: "${{steps.testappendcheckoutrecord.outputs.result}}"
+          TESTLOADCHECKOUTCOUNTS_RESULTS: "${{steps.testloadcheckoutcounts.outputs.result}}"
+          TESTCLOSEOUTSESSION_RESULTS: "${{steps.testcloseoutsession.outputs.result}}"
+          TESTEXPORTCATALOGTOCSV_RESULTS: "${{steps.testexportcatalogtocsv.outputs.result}}"
+          TESTIMPORTAVAILABLETITLES_RESULTS: "${{steps.testimportavailabletitles.outputs.result}}"
+          TESTUPDATELIBRARYSETTINGS_RESULTS: "${{steps.testupdatelibrarysettings.outputs.result}}"
         with:
-          runners: testtallyscanneditems,testmergedepartmentbudgets,testfilterlowstock,testconvertmeterstofeet,testlabelbatchsizes,testextractuniqueemaildomains,testbucketagesbygroup,testemployeerecord,testcalculategrosspay
+          runners: testappendcheckoutrecord,testloadcheckoutcounts,testcloseoutsession,testexportcatalogtocsv,testimportavailabletitles,testupdatelibrarysettings

@@ -1,30 +1,39 @@
-# Programming Assignment 2 - Advanced Data Collections
+# Programming Assignment 3 - File IO and Exception Handling
 
 ## Assignment Overview
 
-In this assignment, you will practice working with Python dictionaries and
-comprehensions (list, set, and dict), including comprehensions that embed a
-ternary (conditional) expression, along with a structured record built
-using `dataclasses.dataclass`. Each exercise is implemented as a single
-function (or, in one case, a small class) that you must complete inside
-`inventory_management.py`. The exercises are framed around a small
-warehouse/payroll scenario: tallying scanned items, merging department
-budgets, checking stock levels, converting units, labeling batches,
-extracting email domains, bucketing ages, and calculating employee pay.
+In this assignment, you will practice reading, writing, and appending
+text files, CSV files, and JSON files, along with handling exceptions
+using `try`/`except`/`finally`. Each exercise is implemented as a
+single function that you must complete inside `library_records.py`.
+The exercises are framed around a small library checkout and catalog
+scenario: appending checkout records to a text log, tallying up how
+many books each member has checked out, safely closing out a session
+so that a summary line is always recorded, exporting and importing a
+book catalog to/from a CSV file, and reading/updating a JSON settings
+file.
 
 
 ## Learning Objectives
 
 By the end of this assignment, you should be able to:
 
-- Build and manipulate Python dictionaries, including counting, merging,
-  and filtering based on values.
-- Write list, set, and dict comprehensions, including comprehensions that
-  embed a ternary (conditional) expression.
-- Choose the appropriate collection type (dict, list, or set) for a given
-  problem based on its properties.
-- Define a `dataclass` with typed fields and use it to model a simple,
-  mutable record.
+- Read from and write to plain text files using a context manager
+  (`with open(...) as f:`), including opening a file in **append**
+  mode (`"a"`) so that new content is added without erasing what came
+  before.
+- Read from and write to CSV files using the `csv` module
+  (`csv.DictWriter`, `csv.DictReader`).
+- Read from and write to JSON files using the `json` module
+  (`json.load`, `json.dump`).
+- Use `try`/`except` to catch specific exceptions such as
+  `FileNotFoundError` and `ValueError`, and recover from them instead
+  of crashing.
+- Use `try`/`except`/`finally` together so that a piece of code
+  (such as writing a final log entry) always runs, whether or not an
+  error occurred.
+- Raise your own exceptions (`raise ValueError(...)`) to signal
+  invalid data.
 - Write and test small, self-contained functions with clear inputs and
   outputs.
 - Use `pytest` to run a suite of unit tests against your own code.
@@ -33,19 +42,19 @@ By the end of this assignment, you should be able to:
 ## Assignment Structure
 
 This assignment is split across a few files: a starter file containing
-function/class stubs for you to complete, a test file used to
-automatically grade your work, and supporting configuration for running
-the tests both locally and on GitHub Actions.
+function stubs for you to complete, a test file used to automatically
+grade your work, and supporting configuration for running the tests
+both locally and on GitHub Actions.
 
 
 ### Directory Structure
 
 ```
-218-pa-2/
+218-pa-3/
 ├── README.md
 ├── requirements.txt
-├── inventory_management.py
-├── test_inventory_management.py
+├── library_records.py
+├── test_library_records.py
 └── .github
     └── workflows
         └── classroom.yml
@@ -54,31 +63,31 @@ the tests both locally and on GitHub Actions.
 
 ## Functions to Implement
 
-All of the functions/classes below live in `inventory_management.py`. Do
-not change any function/class names, field names, or parameter lists --
-the autograder depends on these exact signatures. Read each item's
-docstring carefully for the exact expected behavior and return type.
+All of the functions below live in `library_records.py`. Do not change
+any function names or parameter lists -- the autograder depends on
+these exact signatures. Read each item's docstring carefully for the
+exact expected behavior and return type.
 
 | Function | Description |
 | --- | --- |
-| `tally_scanned_items(scan_log)` | Return a **dict** counting how many times each item name appears in a warehouse scan log. |
-| `merge_department_budgets(budget1, budget2)` | Return a **dict** merging two department budgets, summing values for departments in both. |
-| `filter_low_stock(inventory, min_stock)` | Return a **sorted list** of item names whose stock is strictly below `min_stock`. |
-| `convert_meters_to_feet(distances_m)` | Return a **list**, built with a list comprehension, of distances converted from meters to feet. |
-| `label_batch_sizes(batch_sizes)` | Return a **list**, built with a list comprehension and ternary operator, labeling each batch "Small" or "Large". |
-| `extract_unique_email_domains(emails)` | Return a **set**, built with a set comprehension, of unique lowercase email domains. |
-| `bucket_ages_by_group(ages)` | Return a **dict**, built with a dict comprehension, mapping each age to an age group label. |
-| `Employee` | A `dataclass` with fields `emp_id` (str), `name` (str), `hourly_rate` (float). |
-| `calculate_gross_pay(employees, hours_worked)` | Return a **dict** mapping each employee's `emp_id` to their gross pay. |
+| `append_checkout_record(filename, member, title)` | **Append** a single "member\|title" line to a text log file without erasing previous entries. |
+| `load_checkout_counts(filename)` | Return a **dict** tallying how many books each member has checked out, handling a missing file and malformed lines. |
+| `close_out_session(filename, final_note)` | Using `try`/`except`/`finally`, append a note (validating it isn't empty) and **always** append a closing "SESSION END" line, returning a status message. |
+| `export_catalog_to_csv(filename, catalog)` | Write a list of `(title, copies_available)` tuples to a CSV file (using `csv.DictWriter`) with `"title"`/`"copies_available"` headers. |
+| `import_available_titles(filename, min_copies)` | Return a **sorted list** of titles from a CSV file with at least `min_copies` copies available. |
+| `update_library_settings(filename, key, value)` | Update (or, if `value` is `None`, remove) a key in a JSON settings file (creating it if missing) and return the updated **dict**. |
 
 
 ## Testing and Performance Analysis
 
-Your implementations are checked with `test_inventory_management.py`, a
-suite of `pytest` unit tests covering every function/class listed above,
-including typical inputs, edge cases (empty inputs, boundary values), and
-checks on the returned data type (e.g., making sure a function returns a
-`set` and not a `list`).
+Your implementations are checked with `test_library_records.py`, a
+suite of `pytest` unit tests covering every function listed above,
+including typical inputs, edge cases (missing files, malformed or
+invalid data, boundary values), and checks on the returned data type
+(e.g., making sure a function returns a `list` and not `None`). The
+tests use temporary files (via pytest's `tmp_path` fixture) so that
+running them will not create or overwrite any files in your project
+directory.
 
 This test suite is also used to **autograde** your submission through a
 GitHub Actions workflow (`.github/workflows/classroom.yml`), which
@@ -95,29 +104,29 @@ should) run the same tests locally before submitting.
    pip install -r requirements.txt
    ```
 
-3. Open `inventory_management.py` and complete each function/class marked
+3. Open `library_records.py` and complete each function marked
    with a `# TODO` comment.
 4. Run the program directly to try it out interactively:
 
    ```
-   python inventory_management.py
+   python library_records.py
    ```
 
 5. Run the automated test suite to check your work:
 
    ```
-   pytest test_inventory_management.py -v
+   pytest test_library_records.py -v
    ```
 
 
 ## Expected Output
 
-When you run the test suite with `pytest test_inventory_management.py -v`,
-it will print one line per test case, showing the test's name followed by
-`PASSED` or `FAILED`. Tests are grouped by the function they check, so a
-failing test's name (for example
-`TestCalculateGrossPay::test_missing_hours_defaults_to_zero`) tells you
-exactly which function and which scenario is not yet working correctly.
-When every function has been implemented correctly, all tests should
-report `PASSED`, and pytest will print a final summary line such as
-`34 passed in 0.02s`.
+When you run the test suite with `pytest test_library_records.py -v`,
+it will print one line per test case, showing the test's name followed
+by `PASSED` or `FAILED`. Tests are grouped by the function they check,
+so a failing test's name (for example
+`TestCloseOutSession::test_session_end_always_written_on_failure`)
+tells you exactly which function and which scenario is not yet working
+correctly. When every function has been implemented correctly, all
+tests should report `PASSED`, and pytest will print a final summary
+line such as `37 passed in 0.07s`.
