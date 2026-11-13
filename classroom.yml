@@ -27,74 +27,52 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: TestAppendCheckoutRecord
-        id: testappendcheckoutrecord
+      - name: TestWeatherStationInit
+        id: testweatherstationinit
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: TestAppendCheckoutRecord
+          test-name: TestWeatherStationInit
           setup-command: ""
-          command: pytest test_library_records.py::TestAppendCheckoutRecord -v
+          command: pytest test_weather_station.py::TestWeatherStationInit -v
           timeout: 10
           max-score: 10
 
-      - name: TestLoadCheckoutCounts
-        id: testloadcheckoutcounts
+      - name: TestEncapsulation
+        id: testencapsulation
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: TestLoadCheckoutCounts
+          test-name: TestEncapsulation
           setup-command: ""
-          command: pytest test_library_records.py::TestLoadCheckoutCounts -v
+          command: pytest test_weather_station.py::TestEncapsulation -v
           timeout: 10
           max-score: 10
 
-      - name: TestCloseOutSession
-        id: testcloseoutsession
+      - name: TestDunderMethods
+        id: testdundermethods
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: TestCloseOutSession
+          test-name: TestDunderMethods
           setup-command: ""
-          command: pytest test_library_records.py::TestCloseOutSession -v
+          command: pytest test_weather_station.py::TestDunderMethods -v
           timeout: 10
           max-score: 10
 
-      - name: TestExportCatalogToCsv
-        id: testexportcatalogtocsv
+      - name: TestOperatorOverloading
+        id: testoperatoroverloading
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: TestExportCatalogToCsv
+          test-name: TestOperatorOverloading
           setup-command: ""
-          command: pytest test_library_records.py::TestExportCatalogToCsv -v
-          timeout: 10
-          max-score: 10
-
-      - name: TestImportAvailableTitles
-        id: testimportavailabletitles
-        uses: classroom-resources/autograding-command-grader@v1
-        with:
-          test-name: TestImportAvailableTitles
-          setup-command: ""
-          command: pytest test_library_records.py::TestImportAvailableTitles -v
-          timeout: 10
-          max-score: 10
-
-      - name: TestUpdateLibrarySettings
-        id: testupdatelibrarysettings
-        uses: classroom-resources/autograding-command-grader@v1
-        with:
-          test-name: TestUpdateLibrarySettings
-          setup-command: ""
-          command: pytest test_library_records.py::TestUpdateLibrarySettings -v
+          command: pytest test_weather_station.py::TestOperatorOverloading -v
           timeout: 10
           max-score: 10
 
       - name: Autograding Reporter
         uses: classroom-resources/autograding-grading-reporter@v1
         env:
-          TESTAPPENDCHECKOUTRECORD_RESULTS: "${{steps.testappendcheckoutrecord.outputs.result}}"
-          TESTLOADCHECKOUTCOUNTS_RESULTS: "${{steps.testloadcheckoutcounts.outputs.result}}"
-          TESTCLOSEOUTSESSION_RESULTS: "${{steps.testcloseoutsession.outputs.result}}"
-          TESTEXPORTCATALOGTOCSV_RESULTS: "${{steps.testexportcatalogtocsv.outputs.result}}"
-          TESTIMPORTAVAILABLETITLES_RESULTS: "${{steps.testimportavailabletitles.outputs.result}}"
-          TESTUPDATELIBRARYSETTINGS_RESULTS: "${{steps.testupdatelibrarysettings.outputs.result}}"
+          TESTWEATHERSTATIONINIT_RESULTS: "${{steps.testweatherstationinit.outputs.result}}"
+          TESTENCAPSULATION_RESULTS: "${{steps.testencapsulation.outputs.result}}"
+          TESTDUNDERMETHODS_RESULTS: "${{steps.testdundermethods.outputs.result}}"
+          TESTOPERATOROVERLOADING_RESULTS: "${{steps.testoperatoroverloading.outputs.result}}"
         with:
-          runners: testappendcheckoutrecord,testloadcheckoutcounts,testcloseoutsession,testexportcatalogtocsv,testimportavailabletitles,testupdatelibrarysettings
+          runners: testweatherstationinit,testencapsulation,testdundermethods,testoperatoroverloading
