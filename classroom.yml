@@ -27,52 +27,41 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: TestWeatherStationInit
-        id: testweatherstationinit
+      - name: TestCollectionRecord
+        id: testcollectionrecord
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: TestWeatherStationInit
+          test-name: TestCollectionRecord
           setup-command: ""
-          command: pytest test_weather_station.py::TestWeatherStationInit -v
+          command: pytest test_museum_catalog.py::TestCollectionRecord -v
           timeout: 10
           max-score: 10
 
-      - name: TestEncapsulation
-        id: testencapsulation
+      - name: TestConcreteRecords
+        id: testconcreterecords
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: TestEncapsulation
+          test-name: TestConcreteRecords
           setup-command: ""
-          command: pytest test_weather_station.py::TestEncapsulation -v
+          command: pytest test_museum_catalog.py::TestConcreteRecords -v
           timeout: 10
           max-score: 10
 
-      - name: TestDunderMethods
-        id: testdundermethods
+      - name: TestPolymorphismAndProtocol
+        id: testpolymorphismandprotocol
         uses: classroom-resources/autograding-command-grader@v1
         with:
-          test-name: TestDunderMethods
+          test-name: TestPolymorphismAndProtocol
           setup-command: ""
-          command: pytest test_weather_station.py::TestDunderMethods -v
-          timeout: 10
-          max-score: 10
-
-      - name: TestOperatorOverloading
-        id: testoperatoroverloading
-        uses: classroom-resources/autograding-command-grader@v1
-        with:
-          test-name: TestOperatorOverloading
-          setup-command: ""
-          command: pytest test_weather_station.py::TestOperatorOverloading -v
+          command: pytest test_museum_catalog.py::TestPolymorphismAndProtocol -v
           timeout: 10
           max-score: 10
 
       - name: Autograding Reporter
         uses: classroom-resources/autograding-grading-reporter@v1
         env:
-          TESTWEATHERSTATIONINIT_RESULTS: "${{steps.testweatherstationinit.outputs.result}}"
-          TESTENCAPSULATION_RESULTS: "${{steps.testencapsulation.outputs.result}}"
-          TESTDUNDERMETHODS_RESULTS: "${{steps.testdundermethods.outputs.result}}"
-          TESTOPERATOROVERLOADING_RESULTS: "${{steps.testoperatoroverloading.outputs.result}}"
+          TESTCOLLECTIONRECORD_RESULTS: "${{steps.testcollectionrecord.outputs.result}}"
+          TESTCONCRETERECORDS_RESULTS: "${{steps.testconcreterecords.outputs.result}}"
+          TESTPOLYMORPHISMANDPROTOCOL_RESULTS: "${{steps.testpolymorphismandprotocol.outputs.result}}"
         with:
-          runners: testweatherstationinit,testencapsulation,testdundermethods,testoperatoroverloading
+          runners: testcollectionrecord,testconcreterecords,testpolymorphismandprotocol
