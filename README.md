@@ -1,27 +1,30 @@
-# Programming Assignment 1 - Simple Data Collections
+# Programming Assignment 2 - Advanced Data Collections
 
 ## Assignment Overview
 
-In this assignment, you will practice working with Python's built-in simple data
-collections (lists, tuples, and sets) to solve a series of small, focused
-programming exercises. Each exercise is implemented as a single function that
-you must complete inside `data_collections.py`. The assignment is designed as 
-an applied lab: you will not be designing a program from scratch, but instead 
-filling in the logic for a set of well-defined functions using the tools you 
-have learned so far (console I/O, variables/arithmetic, conditionals, loops, 
-strings, and functions), together with your new knowledge of lists, tuples, and sets.
+In this assignment, you will practice working with Python dictionaries and
+comprehensions (list, set, and dict), including comprehensions that embed a
+ternary (conditional) expression, along with a structured record built
+using `dataclasses.dataclass`. Each exercise is implemented as a single
+function (or, in one case, a small class) that you must complete inside
+`inventory_management.py`. The exercises are framed around a small
+warehouse/payroll scenario: tallying scanned items, merging department
+budgets, checking stock levels, converting units, labeling batches,
+extracting email domains, bucketing ages, and calculating employee pay.
 
 
 ## Learning Objectives
 
 By the end of this assignment, you should be able to:
 
-- Create, read, and manipulate Python lists, tuples, and sets.
-- Choose the appropriate collection type (list, tuple, or set) for a given
-  problem based on its properties (ordering, mutability, uniqueness).
-- Use loops and conditionals together with collections to solve problems
-  such as counting, filtering, grouping, and de-duplicating data.
-- Use set operations (union, intersection) to compare collections of data.
+- Build and manipulate Python dictionaries, including counting, merging,
+  and filtering based on values.
+- Write list, set, and dict comprehensions, including comprehensions that
+  embed a ternary (conditional) expression.
+- Choose the appropriate collection type (dict, list, or set) for a given
+  problem based on its properties.
+- Define a `dataclass` with typed fields and use it to model a simple,
+  mutable record.
 - Write and test small, self-contained functions with clear inputs and
   outputs.
 - Use `pytest` to run a suite of unit tests against your own code.
@@ -30,19 +33,19 @@ By the end of this assignment, you should be able to:
 ## Assignment Structure
 
 This assignment is split across a few files: a starter file containing
-function stubs for you to complete, a test file used to automatically grade
-your work, and supporting configuration for running the tests both locally
-and on GitHub Actions.
+function/class stubs for you to complete, a test file used to
+automatically grade your work, and supporting configuration for running
+the tests both locally and on GitHub Actions.
 
 
 ### Directory Structure
 
 ```
-218-pa-1/
+218-pa-2/
 ├── README.md
 ├── requirements.txt
-├── data_collections.py
-├── test_data_collections.py
+├── inventory_management.py
+├── test_inventory_management.py
 └── .github
     └── workflows
         └── classroom.yml
@@ -51,32 +54,31 @@ and on GitHub Actions.
 
 ## Functions to Implement
 
-All of the functions below live in `data_collections.py`. Do not change any
-function names or parameter lists -- the autograder depends on these exact
-signatures. Read each function's docstring carefully for the exact expected
-behavior and return type.
+All of the functions/classes below live in `inventory_management.py`. Do
+not change any function/class names, field names, or parameter lists --
+the autograder depends on these exact signatures. Read each item's
+docstring carefully for the exact expected behavior and return type.
 
 | Function | Description |
 | --- | --- |
-| `get_unique_words(text)` | Return a **set** of the unique, lowercased words in a string. |
-| `count_word_frequencies(words)` | Return a **list** of `(word, count)` tuples for how many times each word appears. |
-| `find_common_elements(list1, list2)` | Return a **set** containing the elements shared by two lists. |
-| `remove_duplicates_preserve_order(lst)` | Return a **list** with duplicates removed, preserving the original order. |
-| `create_student_records(name, age, grade)` | Return a **list** of `(name, age, grade)` tuples. |
-| `calculate_statistics(numbers)` | Return a **tuple** `(min, max, sum, average)` for a list of numbers. |
-| `merge_sets(set1, set2)` | Return the union of two **sets**. |
-| `filter_and_sort(numbers, threshold)` | Return a **list**, sorted ascending, of numbers greater than a threshold. |
-| `group_by_length(words)` | Return a **list** of `(length, words)` tuples grouping words by length. |
-| `is_palindrome(s)` | Return `True` if a string is a palindrome, ignoring case and spaces. |
+| `tally_scanned_items(scan_log)` | Return a **dict** counting how many times each item name appears in a warehouse scan log. |
+| `merge_department_budgets(budget1, budget2)` | Return a **dict** merging two department budgets, summing values for departments in both. |
+| `filter_low_stock(inventory, min_stock)` | Return a **sorted list** of item names whose stock is strictly below `min_stock`. |
+| `convert_meters_to_feet(distances_m)` | Return a **list**, built with a list comprehension, of distances converted from meters to feet. |
+| `label_batch_sizes(batch_sizes)` | Return a **list**, built with a list comprehension and ternary operator, labeling each batch "Small" or "Large". |
+| `extract_unique_email_domains(emails)` | Return a **set**, built with a set comprehension, of unique lowercase email domains. |
+| `bucket_ages_by_group(ages)` | Return a **dict**, built with a dict comprehension, mapping each age to an age group label. |
+| `Employee` | A `dataclass` with fields `emp_id` (str), `name` (str), `hourly_rate` (float). |
+| `calculate_gross_pay(employees, hours_worked)` | Return a **dict** mapping each employee's `emp_id` to their gross pay. |
 
 
 ## Testing and Performance Analysis
 
-Your implementations are checked with `test_data_collections.py`, a suite of
-`pytest` unit tests covering every function listed above, including typical
-inputs, edge cases (empty lists/sets, single-element inputs), and checks on
-the returned data type (e.g., making sure a function returns a `set` and not
-a `list`).
+Your implementations are checked with `test_inventory_management.py`, a
+suite of `pytest` unit tests covering every function/class listed above,
+including typical inputs, edge cases (empty inputs, boundary values), and
+checks on the returned data type (e.g., making sure a function returns a
+`set` and not a `list`).
 
 This test suite is also used to **autograde** your submission through a
 GitHub Actions workflow (`.github/workflows/classroom.yml`), which
@@ -93,28 +95,29 @@ should) run the same tests locally before submitting.
    pip install -r requirements.txt
    ```
 
-3. Open `data_collections.py` and complete each function marked with a
-   `# TODO: Implement this function` comment.
+3. Open `inventory_management.py` and complete each function/class marked
+   with a `# TODO` comment.
 4. Run the program directly to try it out interactively:
 
    ```
-   python data_collections.py
+   python inventory_management.py
    ```
 
 5. Run the automated test suite to check your work:
 
    ```
-   pytest test_data_collections.py -v
+   pytest test_inventory_management.py -v
    ```
 
 
 ## Expected Output
 
-When you run the test suite with `pytest test_data_collections.py -v`, it
-will print one line per test case, showing the test's name followed by
+When you run the test suite with `pytest test_inventory_management.py -v`,
+it will print one line per test case, showing the test's name followed by
 `PASSED` or `FAILED`. Tests are grouped by the function they check, so a
 failing test's name (for example
-`TestIsPalindrome::test_case_insensitive`) tells you exactly which function
-and which scenario is not yet working correctly. When every function has
-been implemented correctly, all tests should report `PASSED`, and pytest
-will print a final summary line such as `38 passed in 0.02s`.
+`TestCalculateGrossPay::test_missing_hours_defaults_to_zero`) tells you
+exactly which function and which scenario is not yet working correctly.
+When every function has been implemented correctly, all tests should
+report `PASSED`, and pytest will print a final summary line such as
+`34 passed in 0.02s`.
