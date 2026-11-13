@@ -1,0 +1,144 @@
+name: Autograding Tests
+on:
+  push:
+    branches: ["*"]
+  pull_request:
+    branches: ["*"]
+  workflow_dispatch:
+
+permissions:
+  checks: write
+  actions: read
+  contents: read
+
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: TestGetUniqueWords
+        id: testgetuniquewords
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: TestGetUniqueWords
+          setup-command: ""
+          command: pytest test_data_collections.py::TestGetUniqueWords -v
+          timeout: 10
+          max-score: 10
+
+      - name: TestCountWordFrequencies
+        id: testcountwordfrequencies
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: TestCountWordFrequencies
+          setup-command: ""
+          command: pytest test_data_collections.py::TestCountWordFrequencies -v
+          timeout: 10
+          max-score: 10
+
+      - name: TestFindCommonElements
+        id: testfindcommonelements
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: TestFindCommonElements
+          setup-command: ""
+          command: pytest test_data_collections.py::TestFindCommonElements -v
+          timeout: 10
+          max-score: 10
+
+      - name: TestRemoveDuplicatesPreserveOrder
+        id: testremoveduplicatespreserveorder
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: TestRemoveDuplicatesPreserveOrder
+          setup-command: ""
+          command: pytest test_data_collections.py::TestRemoveDuplicatesPreserveOrder -v
+          timeout: 10
+          max-score: 10
+
+      - name: TestCreateStudentRecords
+        id: testcreatestudentrecords
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: TestCreateStudentRecords
+          setup-command: ""
+          command: pytest test_data_collections.py::TestCreateStudentRecords -v
+          timeout: 10
+          max-score: 10
+
+      - name: TestCalculateStatistics
+        id: testcalculatestatistics
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: TestCalculateStatistics
+          setup-command: ""
+          command: pytest test_data_collections.py::TestCalculateStatistics -v
+          timeout: 10
+          max-score: 10
+
+      - name: TestMergeSets
+        id: testmergesets
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: TestMergeSets
+          setup-command: ""
+          command: pytest test_data_collections.py::TestMergeSets -v
+          timeout: 10
+          max-score: 10
+
+      - name: TestFilterAndSort
+        id: testfilterandsort
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: TestFilterAndSort
+          setup-command: ""
+          command: pytest test_data_collections.py::TestFilterAndSort -v
+          timeout: 10
+          max-score: 10
+
+      - name: TestGroupByLength
+        id: testgroupbylength
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: TestGroupByLength
+          setup-command: ""
+          command: pytest test_data_collections.py::TestGroupByLength -v
+          timeout: 10
+          max-score: 10
+
+      - name: TestIsPalindrome
+        id: testispalindrome
+        uses: classroom-resources/autograding-command-grader@v1
+        with:
+          test-name: TestIsPalindrome
+          setup-command: ""
+          command: pytest test_data_collections.py::TestIsPalindrome -v
+          timeout: 10
+          max-score: 10
+
+      - name: Autograding Reporter
+        uses: classroom-resources/autograding-grading-reporter@v1
+        env:
+          TESTGETUNIQUEWORDS_RESULTS: "${{steps.testgetuniquewords.outputs.result}}"
+          TESTCOUNTWORDFREQUENCIES_RESULTS: "${{steps.testcountwordfrequencies.outputs.result}}"
+          TESTFINDCOMMONELEMENTS_RESULTS: "${{steps.testfindcommonelements.outputs.result}}"
+          TESTREMOVEDUPLICATESPRESERVEORDER_RESULTS: "${{steps.testremoveduplicatespreserveorder.outputs.result}}"
+          TESTCREATESTUDENTRECORDS_RESULTS: "${{steps.testcreatestudentrecords.outputs.result}}"
+          TESTCALCULATESTATISTICS_RESULTS: "${{steps.testcalculatestatistics.outputs.result}}"
+          TESTMERGESETS_RESULTS: "${{steps.testmergesets.outputs.result}}"
+          TESTFILTERANDSORT_RESULTS: "${{steps.testfilterandsort.outputs.result}}"
+          TESTGROUPBYLENGTH_RESULTS: "${{steps.testgroupbylength.outputs.result}}"
+          TESTISPALINDROME_RESULTS: "${{steps.testispalindrome.outputs.result}}"
+        with:
+          runners: testgetuniquewords,testcountwordfrequencies,testfindcommonelements,testremoveduplicatespreserveorder,testcreatestudentrecords,testcalculatestatistics,testmergesets,testfilterandsort,testgroupbylength,testispalindrome
